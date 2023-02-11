@@ -75,7 +75,26 @@ def create_accounts():
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
-# ... place you code here to UPDATE an account ...
+@app.route("/accounts", methods=["PATCH"])
+def update_account():
+    app.logger.info("Request to update an Account")
+    check_content_type("application/json")
+
+    accountId = request.get_json()["id"]
+    account = Account.find(accountId)
+    if account is None:
+        abort(status.HTTP_404_NOT_FOUND, "The account cannot be found")
+
+    app.logger.info(account)
+    app.logger.info(account.serialize())
+
+    account.deserialize(request.get_json())
+    account.update()
+    return make_response(
+        jsonify(account.serialize()),
+        status.HTTP_200_OK,
+        {}
+    )
 
 
 ######################################################################
