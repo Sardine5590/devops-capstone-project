@@ -151,7 +151,7 @@ class TestAccountService(TestCase):
     def update_nonexistent_account_test(self):
         """Test for a non-existent account returns a 404"""
         account = self._create_accounts(1)[0]
-        account.id = "209q3786527457342985327lmpttkrscvienvd"
+        account.id = "-1"
 
         response = self.client.patch(
             BASE_URL,
