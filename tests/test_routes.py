@@ -124,6 +124,7 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
     # ADD YOUR TEST CASES HERE ...
+
     def update_account_test(self):
         """Test update for an account is successful"""
         account = self._create_accounts(1)[0]
@@ -156,6 +157,32 @@ class TestAccountService(TestCase):
         response = self.client.patch(
             BASE_URL,
             json=account.serialize(),
+            content_type="application/json"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def read_account_test(self):
+        """Test reading an account succeeds"""
+        account = self._create_accounts(1)[0]
+        id = account.id
+
+        response = self.client.get(
+            BASE_URL,
+            json={"id":id}
+            content_type="application/json"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertDictEqual(account.serialize(), response.get_json())
+
+
+    def read_nonexistent_account_test(self):
+        """Test reading a non-existent account fails with 404"""
+        id = -1
+        response = self.client.get(
+            BASE_URL
+            json={"id":id}
             content_type="application/json"
         )
 
