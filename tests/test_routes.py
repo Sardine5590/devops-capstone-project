@@ -208,7 +208,7 @@ class TestAccountService(TestCase):
         )
         
         self.assertEqual(response1.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(len(response1.get_json()), 0)
+        self.assertIs(response1.get_json(), None)
 
         # Make sure actually deleted
         response2 = self.client.get(
