@@ -189,7 +189,8 @@ class TestAccountService(TestCase):
 
     def list_accounts_test(self):
         """Test listing accounts returns a list of the expected size"""
-        expectedSize = len(Account.all())
+        expectedSize = 5
+        self._create_accounts(5)
         response = self.client.get(
             BASE_URL + "/all"
         )
