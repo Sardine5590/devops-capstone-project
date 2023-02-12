@@ -64,9 +64,12 @@ def create_accounts():
 @app.route("/accounts/all", methods=["GET"])
 def read_all_accounts():
     app.logger.info("Request to read all accounts")
-    Account.all()
+    accountList = []
+    for account in Account.all():
+        accountList.append(account.serialize())
+
     return make_response(
-        jsonify(Account.all()),
+        jsonify(accountList),
         status.HTTP_200_OK,
         {}
     )
@@ -122,8 +125,21 @@ def update_account():
 # DELETE AN ACCOUNT
 ######################################################################
 
-# ... place you code here to DELETE an account ...
+@app.route("/accounts", methods=["DELETE"])
+def delete_account():
+    app.logger.info("Request to delete an Account")
+    check_content_type("application/json")
 
+    accountId = request.get_json()["id"]
+    account = Account.find(accountId)
+    if account is not None:
+        account.delete()
+
+    return make_response(
+        "",
+        status.HTTP_204_NO_CONTENT,
+        {}
+    )
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S

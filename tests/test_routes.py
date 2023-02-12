@@ -189,10 +189,32 @@ class TestAccountService(TestCase):
 
     def list_accounts_test(self):
         """Test listing accounts returns a list of the expected size"""
-        expectedSize = len(Account.all())
+        expectedSize = 5
+        self._create_accounts(5)
         response = self.client.get(
             BASE_URL + "/all"
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.get_json()), expectedSize)
+
+    def delete_account_test(self):
+        """Test deleting account"""
+        account = self._create_accounts(1)[0]
+        id = account.id
+        response1 = self.client.delete(
+            BASE_URL,
+            json={"id":id},
+            content_type="application/json"
+        )
+        
+        self.assertEqual(response1.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertIs(response1.get_json(), None)
+
+        # Make sure actually deleted
+        response2 = self.client.get(
+            BASE_URL,
+            json={"id":id},
+            content_type="application/json"
+        )
+        self.assertEqual(response2.status_code, status.HTTP_404_NOT_FOUND)
