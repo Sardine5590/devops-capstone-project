@@ -174,7 +174,7 @@ class TestAccountService(TestCase):
 
         response = self.client.get(
             BASE_URL,
-            json={"id":id},
+            json={"id": id},
             content_type="application/json"
         )
 
@@ -186,12 +186,12 @@ class TestAccountService(TestCase):
         id = -1
         response = self.client.get(
             BASE_URL,
-            json={"id":id},
+            json={"id": id},
             content_type="application/json"
         )
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-    
+
     def read_account_missing_id_test(self):
         """Test read account returns 400 when not providing an ID"""
         response = self.client.get(BASE_URL, json={}, content_type="application/json")
@@ -214,17 +214,17 @@ class TestAccountService(TestCase):
         id = account.id
         response1 = self.client.delete(
             BASE_URL,
-            json={"id":id},
+            json={"id": id},
             content_type="application/json"
         )
-        
+
         self.assertEqual(response1.status_code, status.HTTP_204_NO_CONTENT)
         self.assertIs(response1.get_json(), None)
 
         # Make sure actually deleted
         response2 = self.client.get(
             BASE_URL,
-            json={"id":id},
+            json={"id": id},
             content_type="application/json"
         )
         self.assertEqual(response2.status_code, status.HTTP_404_NOT_FOUND)

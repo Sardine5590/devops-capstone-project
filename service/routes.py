@@ -61,6 +61,7 @@ def create_accounts():
 # LIST ALL ACCOUNTS
 ######################################################################
 
+
 @app.route("/accounts/all", methods=["GET"])
 def read_all_accounts():
     app.logger.info("Request to read all accounts")
@@ -89,7 +90,7 @@ def read_account():
     account = Account.find(accountId)
     if account is None:
         abort(status.HTTP_404_NOT_FOUND, "The account cannot be found")
-    
+
     return make_response(
         jsonify(account.serialize()),
         status.HTTP_200_OK,
@@ -100,12 +101,13 @@ def read_account():
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
+
 @app.route("/accounts", methods=["PATCH"])
 def update_account():
     app.logger.info("Request to update an Account")
     check_content_type("application/json")
     check_request_contains_id(request)
-    
+
     accountId = request.get_json()["id"]
     app.logger.info(accountId)
     account = Account.find(accountId)
@@ -160,6 +162,7 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {media_type}",
     )
+
 
 def check_request_contains_id(request):
     if "id" not in request.get_json():
