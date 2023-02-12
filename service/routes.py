@@ -83,6 +83,7 @@ def read_all_accounts():
 def read_account():
     app.logger.info("Request to read an Account")
     check_content_type("application/json")
+    check_request_contains_id(request)
 
     accountId = request.get_json()["id"]
     account = Account.find(accountId)
@@ -103,8 +104,10 @@ def read_account():
 def update_account():
     app.logger.info("Request to update an Account")
     check_content_type("application/json")
-
+    check_request_contains_id(request)
+    
     accountId = request.get_json()["id"]
+    app.logger.info(accountId)
     account = Account.find(accountId)
     if account is None:
         abort(status.HTTP_404_NOT_FOUND, "The account cannot be found")
@@ -129,6 +132,7 @@ def update_account():
 def delete_account():
     app.logger.info("Request to delete an Account")
     check_content_type("application/json")
+    check_request_contains_id(request)
 
     accountId = request.get_json()["id"]
     account = Account.find(accountId)
@@ -156,3 +160,7 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {media_type}",
     )
+
+def check_request_contains_id(request):
+    if "id" not in request.get_json():
+        abort(status.HTTP_400_BAD_REQUEST, "Request needs ID")
