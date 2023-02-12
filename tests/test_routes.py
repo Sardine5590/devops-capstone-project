@@ -162,6 +162,11 @@ class TestAccountService(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def update_account_missing_id_test(self):
+        """Test update returns 400 when not providing an ID"""
+        response = self.client.patch(BASE_URL, json={}, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def read_account_test(self):
         """Test reading an account succeeds"""
         account = self._create_accounts(1)[0]
@@ -186,6 +191,11 @@ class TestAccountService(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def read_account_missing_id_test(self):
+        """Test read account returns 400 when not providing an ID"""
+        response = self.client.get(BASE_URL, json={}, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def list_accounts_test(self):
         """Test listing accounts returns a list of the expected size"""
@@ -218,3 +228,8 @@ class TestAccountService(TestCase):
             content_type="application/json"
         )
         self.assertEqual(response2.status_code, status.HTTP_404_NOT_FOUND)
+
+    def delete_account_missing_id_test(self):
+        """Test delete account returns 400 when not providing an ID"""
+        response = self.client.delete(BASE_URL, json={}, content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
